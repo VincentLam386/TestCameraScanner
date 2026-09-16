@@ -17,10 +17,17 @@ btn.addEventListener("click", async () => {
 
     try {
         await html5QrCode.start(
-            { facingMode: "environment" }, // back camera on phones
-            {
-                fps: 10,
-                qrbox: 250
+            { facingMode: "environment",  }, 
+            { 
+                aspectRatio: 1.777778,
+                focusMode: "continuous", 
+                fps: 15,  
+                videoConstraints: 
+                { 
+                    facingMode: 'environment', 
+                    width: 9999 
+                }, 
+                qrbox: { width: 280, height: 280, },  
             },
             (decodedText) => {
                 result.innerHTML = `
@@ -35,9 +42,10 @@ btn.addEventListener("click", async () => {
             (errorMessage) => {
                 // Ignore scan errors
             }
-        );
+        )
     } catch (err) {
         result.textContent = "Unable to access camera.";
         console.error(err);
+        alert(err);
     }
 });
