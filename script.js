@@ -1,43 +1,46 @@
-const btn = document.getElementById("cameraBtn");
-const reader = document.getElementById("reader");
-const result = document.getElementById("result");
+function onScanSuccess(decodedText, decodedResult) {
+    // Stop scanning immediately to avoid multiple triggers
+    html5QrcodeScanner.clear();
 
-let scannerStarted = false;
-let html5QrCode;
+    // Handle the redirect based on the decoded value
+    if (decodedText.startsWith('http')) {
+        window.location.href = decodedText; // Redirect to the URL
+    } else {
+        // Example: Redirect to a specific page with the value as a parameter
+        // window.location.href = `/details?code=${encodeURIComponent(decodedText)}`;
+        alert(`Scanned value: ${decodedText}`);
+    }
+}
 
-btn.addEventListener("click", async () => {
-    if (scannerStarted) return;
+function onScanError(errorMessage) {
+    // This callback is optional; it fires frequently when no code is in view.
+    // You can safely ignore it or log it for debugging.
+}
 
-    scannerStarted = true;
+const html5QrCode = new Html5Qrcode("reader");
 
-    reader.style.display = "block";
-    btn.style.display = "none";
-
-    html5QrCode = new Html5Qrcode("reader");
-
-    try {
-        await html5QrCode.start(
-            { facingMode: "environment" }, // back camera on phones
-            {
-                fps: 10,
-                qrbox: 250
-            },
-            (decodedText) => {
-                result.innerHTML = `
-                    QR Code Found:<br>
-                    ${decodedText}
-                        ${decodedText}
-                    </a>
-                `;
-
-                html5QrCode.stop();
-            },
-            (errorMessage) => {
-                // Ignore scan errors
-            }
-        );
-    } catch (err) {
-        result.textContent = "Unable to access camera.";
-        console.error(err);
+// 3. Start scanning with autofocus constraint
+html5QrCode.start(
+    { facingMode: "environment" },
+    { 
+        fps: 10, 
+        qrbox: 250,
+        // Request continuous autofocus
+        videoConstraints: {
+            focusMode: { ideal: "continuous" }
+        }
+    },
+    onScanSuccess,
+    onScanError
+).then(() => {
+    // 4. After starting, check if the constraint was applied
+    const track = html5QrCode.getRunningTrack();
+    if (track) {
+        const capabilities = track.getCapabilities();
+        if (capabilities.focusMode && capabilities.focusMode.includes("continuous")) {
+            console.log("Continuous autofocus is supported and active.");
+        } else {
+            console.warn("Continuous autofocus is not supported on this device.");
+        }
     }
 });
