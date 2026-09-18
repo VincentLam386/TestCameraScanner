@@ -1,0 +1,108 @@
+body{
+    margin:0;
+    font-family:Segoe UI,sans-serif;
+    background:#f5f5f5;
+}
+
+.header{
+    background:#1976d2;
+    color:white;
+    padding:15px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.container {
+    text-align: center;
+}
+
+#reader{
+    width: 320px;
+    margin: 20px auto;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.5);
+
+    z-index:999;
+}
+
+.modal.show{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-content{
+    width:95%;
+    max-width:450px;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.modal-header{
+    background:#1976d2;
+    color:white;
+
+    padding:15px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal-header button{
+
+    border:0;
+    background:none;
+
+    color:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+.stock-row{
+    display:flex;
+    justify-content:space-between;
+
+    padding:12px;
+
+    border-bottom:1px solid #eee;
+}
+
+.stock-low{
+    color:red;
+    font-weight:bold;
+}
+
+.stock-ok{
+    color:green;
+    font-weight:bold;
+}
+
+.item-header{
+    padding:15px;
+}
+
+.error{
+    padding:30px;
+    text-align:center;
+    color:red;
+}
